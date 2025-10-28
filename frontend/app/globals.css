@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #FF8A3D;
+}
+
+html { scroll-behavior: smooth; }
+
+/* subtle focus ring */
+:where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ripple utility */
+.btn-ripple { position: relative; overflow: hidden; }
+.btn-ripple:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(255,138,61,.25), transparent 40%);
+  opacity: 0; transition: opacity .3s ease;
+}
+.btn-ripple:active:after { opacity: 1; transition: opacity .15s ease; }
+
+

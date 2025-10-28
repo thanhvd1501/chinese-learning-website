@@ -1,0 +1,15 @@
+package com.chineselearning.mapper;
+
+import com.chineselearning.domain.Vocabulary;
+import com.chineselearning.dto.VocabularyResponse;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+@Mapper(componentModel = "spring")
+public interface VocabularyMapper {
+
+    VocabularyMapper INSTANCE = Mappers.getMapper(VocabularyMapper.class);
+
+    VocabularyResponse toResponse(Vocabulary vocabulary);
+}
+

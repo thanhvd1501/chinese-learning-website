@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: chinese_db
+    environment:
+      POSTGRES_USER: chinese
+      POSTGRES_PASSWORD: chinese
+      POSTGRES_DB: chinese
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chinese"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - chinese_net
+
+networks:
+  chinese_net:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+
+
