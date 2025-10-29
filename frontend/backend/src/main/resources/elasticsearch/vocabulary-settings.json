@@ -1,0 +1,70 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "refresh_interval": "30s",
+    "max_result_window": 10000,
+    "analysis": {
+      "analyzer": {
+        "pinyin_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase"]
+        },
+        "vietnamese_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "hanzi": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "pinyin": {
+        "type": "text",
+        "analyzer": "pinyin_analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "nghia": {
+        "type": "text",
+        "analyzer": "vietnamese_analyzer"
+      },
+      "viDu": {
+        "type": "text"
+      },
+      "bienThe": {
+        "type": "keyword"
+      },
+      "tags": {
+        "type": "keyword"
+      },
+      "searchText": {
+        "type": "text",
+        "analyzer": "standard"
+      },
+      "createdAt": {
+        "type": "date"
+      },
+      "updatedAt": {
+        "type": "date"
+      }
+    }
+  }
+}
+

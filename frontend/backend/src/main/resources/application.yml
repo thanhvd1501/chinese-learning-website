@@ -77,6 +77,14 @@ spring:
       #     - localhost:7000
       #     - localhost:7001
       #   max-redirects: 3
+  
+  # Elasticsearch Configuration
+  elasticsearch:
+    uris: http://localhost:9200
+    username: # Leave empty for local dev
+    password: # Leave empty for local dev
+    socket-timeout: 10s
+    connection-timeout: 5s
 
   # Security - OAuth2 Resource Server (Keycloak)
   security:
@@ -108,11 +116,13 @@ logging:
     root: INFO
     com.chineselearning: DEBUG
     org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-  file:
+
+# Application Configuration
+app:
+  elasticsearch:
+    sync:
+      cron: "0 */30 * * * *"  # Sync every 30 minutes
+      enabled: true
     name: logs/application.log
 
 # Management & Actuator
