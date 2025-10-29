@@ -51,7 +51,7 @@ public class GrammarTopic {
     }
 
     public enum Level {
-        CƠ_BẢN, TRUNG_BÌNH, NÂNG_CAO
+        BASIC, MEDIUM, ADVANCED
     }
 }
 

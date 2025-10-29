@@ -31,12 +31,12 @@ public class Vocabulary {
     @Column(nullable = false)
     private String nghia;
 
-    @Column(name = "vi_du")
-    private String viDu;
+    @Column(name = "example")
+    private String example;
 
-    @Column(name = "bien_the", nullable = false)
+    @Column(name = "variant", nullable = false)
     @Enumerated(EnumType.STRING)
-    private BienTheType bienThe;
+    private VariantType variant;
 
     @Column(name = "hsk_level")
     private Integer hskLevel;
@@ -66,8 +66,8 @@ public class Vocabulary {
         updatedAt = LocalDateTime.now();
     }
 
-    public enum BienTheType {
-        GIAN, PHON, BOTH
+    public enum VariantType {
+        SIMPLIFIED, TRADITIONAL, BOTH
     }
 }
 

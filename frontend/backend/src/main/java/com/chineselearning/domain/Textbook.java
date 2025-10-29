@@ -28,12 +28,12 @@ public class Textbook {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "phien_ban", nullable = false)
+    @Column(name = "version", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PhienBanType phienBan;
+    private VersionType version;
 
-    @Column(name = "nam_xuat_ban", nullable = false)
-    private Integer namXuatBan;
+    @Column(name = "publication_year", nullable = false)
+    private Integer publicationYear;
 
     @Column(name = "pdf_url")
     private String pdfUrl;
@@ -62,8 +62,8 @@ public class Textbook {
         updatedAt = LocalDateTime.now();
     }
 
-    public enum PhienBanType {
-        PB3, MOI, CU
+    public enum VersionType {
+        PB3, NEW, OLD
     }
 }
 

@@ -38,11 +38,45 @@ spring:
     locations: classpath:db/migration
     schemas: public
 
-  # Cache Configuration
+  # Redis Cache Configuration
   cache:
-    type: caffeine
-    caffeine:
-      spec: maximumSize=1000,expireAfterWrite=10m
+    type: redis
+    redis:
+      time-to-live: 600000 # 10 minutes in milliseconds
+      cache-null-values: false
+      key-prefix: "chinese-learning::"
+      use-key-prefix: true
+  
+  # Redis Connection
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: # Leave empty for local dev, set in production
+      database: 0
+      timeout: 2000ms
+      # Lettuce pool configuration for high performance
+      lettuce:
+        pool:
+          max-active: 20    # Maximum number of connections
+          max-idle: 10      # Maximum idle connections
+          min-idle: 5       # Minimum idle connections
+          max-wait: 2000ms  # Max wait time for connection
+        shutdown-timeout: 100ms
+      # Connection retry
+      connect-timeout: 2000ms
+      # Sentinel configuration (for production HA)
+      # sentinel:
+      #   master: mymaster
+      #   nodes: 
+      #     - localhost:26379
+      #     - localhost:26380
+      # Cluster configuration (for production scalability)
+      # cluster:
+      #   nodes:
+      #     - localhost:7000
+      #     - localhost:7001
+      #   max-redirects: 3
 
   # Security - OAuth2 Resource Server (Keycloak)
   security:

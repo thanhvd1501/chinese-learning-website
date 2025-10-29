@@ -10,7 +10,7 @@ Backend API cho hệ thống học tiếng Trung, được xây dựng với Spr
 - ✅ Quản lý giáo trình và khóa học
 - ✅ OpenAPI/Swagger documentation
 - ✅ Validation với Jakarta Validation
-- ✅ Caching với Caffeine
+- ✅ Redis Distributed Caching với Lettuce connection pooling
 - ✅ Logging với Logback
 - ✅ CORS configuration
 - ✅ Database migration với Flyway
@@ -41,6 +41,8 @@ docker-compose up -d
 Lệnh này sẽ chạy:
 - PostgreSQL trên port `5432`
 - Keycloak trên port `8180`
+- Redis trên port `6379`
+- Redis Commander (UI) trên port `8081`
 
 Kiểm tra status:
 ```bash
@@ -81,6 +83,16 @@ docker-compose ps
    - Client secret: (Facebook App secret)
    - Click "Add"
 
+### 6. Cấu hình Roles (Quan trọng!)
+
+Xem chi tiết trong: **[KEYCLOAK_ROLES_SETUP.md](KEYCLOAK_ROLES_SETUP.md)**
+
+**Quick setup:**
+1. Tạo 3 realm roles: `ADMIN`, `TEACHER`, `STUDENT`
+2. Tạo test users và assign roles
+3. Configure role mapper trong client scopes
+4. Test role-based access
+
 ### 4. Tạo database và chạy migration
 
 Database sẽ được tạo tự động khi chạy application. Flyway migration sẽ chạy tự động.
@@ -96,6 +108,31 @@ mvn spring-boot:run
 ```
 
 Application sẽ chạy tại: http://localhost:8080
+
+## 💾 Redis Cache
+
+Xem chi tiết trong: **[REDIS_CACHE_GUIDE.md](REDIS_CACHE_GUIDE.md)**
+
+### Quick Access
+- **Redis**: localhost:6379
+- **Redis Commander UI**: http://localhost:8081
+- **Cache Stats API**: http://localhost:8080/api/admin/cache/stats (requires ADMIN token)
+
+### Cache Management (ADMIN only)
+
+```bash
+# Get cache statistics
+curl -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://localhost:8080/api/admin/cache/stats
+
+# Clear specific cache
+curl -X DELETE -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://localhost:8080/api/admin/cache/vocabularies
+
+# Clear all caches
+curl -X DELETE -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://localhost:8080/api/admin/cache/all
+```
 
 ## 📚 API Documentation
 
@@ -171,11 +208,24 @@ GET /api/radicals/{id}
 
 ### Protected Endpoints (cần authentication với Keycloak)
 
+#### Course Management (cần JWT token + role)
+```
+POST   /api/courses              # Tạo khóa học mới (ADMIN, TEACHER)
+PUT    /api/courses/{id}         # Cập nhật khóa học (ADMIN, TEACHER)
+DELETE /api/courses/{id}         # Xóa khóa học (ADMIN only)
+```
+
+**Role Requirements:**
+- `ADMIN`: Full access (create, update, delete)
+- `TEACHER`: Can create and update courses
+- `STUDENT`: Read-only access
+
+#### User Management (coming soon)
 ```
 POST /api/users/profile
-GET /api/users/{id}/progress
+GET  /api/users/{id}/progress
 POST /api/ai/chat
-GET /api/users/ai-usage
+GET  /api/users/ai-usage
 ```
 
 ## 🏗️ Cấu trúc dự án

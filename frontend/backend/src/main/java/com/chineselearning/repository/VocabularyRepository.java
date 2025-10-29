@@ -1,7 +1,7 @@
 package com.chineselearning.repository;
 
 import com.chineselearning.domain.Vocabulary;
-import com.chineselearning.domain.Vocabulary.BienTheType;
+import com.chineselearning.domain.Vocabulary.VariantType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,17 +18,17 @@ public interface VocabularyRepository extends JpaRepository<Vocabulary, Long> {
             String hanzi, String pinyin, String nghia, Pageable pageable
     );
 
-    Page<Vocabulary> findByBienThe(BienTheType bienThe, Pageable pageable);
+    Page<Vocabulary> findByBienThe(VariantType bienThe, Pageable pageable);
 
     Page<Vocabulary> findByBienTheAndHanziContainingIgnoreCase(
-            BienTheType bienThe, String search, Pageable pageable
+            VariantType bienThe, String search, Pageable pageable
     );
 
     @Query("SELECT v FROM Vocabulary v WHERE " +
             "v.bienThe = :bienThe AND " +
             "(v.hanzi LIKE %:search% OR v.pinyin LIKE %:search% OR v.nghia LIKE %:search%)")
     Page<Vocabulary> findByBienTheAndSearch(
-            @Param("bienThe") BienTheType bienThe,
+            @Param("bienThe") VariantType bienThe,
             @Param("search") String search,
             Pageable pageable
     );

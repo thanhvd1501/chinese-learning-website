@@ -17,6 +17,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - chinese-learning-network
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -42,7 +44,42 @@ services:
       retries: 10
     volumes:
       - ./keycloak-data:/opt/keycloak/data
+    networks:
+      - chinese-learning-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: chinese-learning-redis
+    command: redis-server --appendonly yes --requirepass "" --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - chinese-learning-network
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: chinese-learning-redis-ui
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - chinese-learning-network
+
+networks:
+  chinese-learning-network:
+    driver: bridge
 
 volumes:
   postgres_data:
+  redis_data:
 

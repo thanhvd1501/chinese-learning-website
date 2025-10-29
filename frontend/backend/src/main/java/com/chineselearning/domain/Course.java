@@ -62,7 +62,7 @@ public class Course {
     }
 
     public enum Difficulty {
-        CƠ_BẢN, TRUNG_BÌNH, NÂNG_CAO, CHUYÊN_GIA
+        BASIC, MEDIUM, ADVANCED, PROFESSIONAL
     }
 }
 

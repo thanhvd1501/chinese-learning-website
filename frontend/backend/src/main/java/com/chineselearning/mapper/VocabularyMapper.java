@@ -1,7 +1,7 @@
 package com.chineselearning.mapper;
 
 import com.chineselearning.domain.Vocabulary;
-import com.chineselearning.dto.VocabularyResponse;
+import com.chineselearning.dto.response.VocabularyResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

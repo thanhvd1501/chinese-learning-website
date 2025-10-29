@@ -1,6 +1,6 @@
-package com.chineselearning.dto;
+package com.chineselearning.dto.response;
 
-import com.chineselearning.domain.Vocabulary.BienTheType;
+import com.chineselearning.domain.Vocabulary.VariantType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class VocabularyResponse {
     private String pinyin;
     private String nghia;
     private String viDu;
-    private BienTheType bienThe;
+    private VariantType bienThe;
     private Integer hskLevel;
     private Integer frequencyRank;
     private Set<String> tags;

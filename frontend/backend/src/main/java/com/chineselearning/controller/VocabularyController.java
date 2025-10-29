@@ -1,9 +1,9 @@
 package com.chineselearning.controller;
 
-import com.chineselearning.domain.Vocabulary.BienTheType;
+import com.chineselearning.domain.Vocabulary.VariantType;
 import com.chineselearning.dto.PageResponse;
-import com.chineselearning.dto.VocabularyResponse;
-import com.chineselearning.service.VocabularyService;
+import com.chineselearning.dto.response.VocabularyResponse;
+import com.chineselearning.service.interfaces.VocabularyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,10 +24,10 @@ public class VocabularyController {
     public ResponseEntity<PageResponse<VocabularyResponse>> getVocabularies(
             @Parameter(description = "Số trang (bắt đầu từ 0)", example = "0") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Số lượng từ vựng mỗi trang", example = "20") @RequestParam(defaultValue = "20") int size,
-            @Parameter(description = "Lọc theo biến thể: GIAN, PHON, BOTH") @RequestParam(required = false) BienTheType bienThe,
+            @Parameter(description = "Lọc theo biến thể: GIAN, PHON, BOTH") @RequestParam(required = false) VariantType bienThe,
             @Parameter(description = "Từ khóa tìm kiếm") @RequestParam(required = false) String search
     ) {
-        PageResponse<VocabularyResponse> response = vocabularyService.getVocabularies(page, size, bienThe, search);
+        PageResponse<VocabularyResponse> response = vocabularyService.getVocabulary(page, size, search, bienThe);
         return ResponseEntity.ok(response);
     }
 
@@ -36,7 +36,7 @@ public class VocabularyController {
     public ResponseEntity<VocabularyResponse> getVocabularyById(
             @Parameter(description = "ID của từ vựng") @PathVariable Long id
     ) {
-        VocabularyResponse response = vocabularyService.getVocabularyById(id);
+        VocabularyResponse response = vocabularyService.getById(id);
         return ResponseEntity.ok(response);
     }
 }
