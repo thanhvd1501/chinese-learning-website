@@ -49,7 +49,7 @@ public class RedisConfig implements CachingConfigurer {
      * Custom ObjectMapper cho Redis serialization
      * Configured để handle Java 8 time, enums, và polymorphic types
      */
-    @Bean
+    @Bean(name = "redisObjectMapper")
     public ObjectMapper redisObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         

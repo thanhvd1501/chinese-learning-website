@@ -19,8 +19,8 @@ CREATE TABLE textbooks (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    phien_ban VARCHAR(10) NOT NULL CHECK (phien_ban IN ('PB3', 'MOI', 'CU')),
-    nam_xuat_ban INTEGER NOT NULL,
+    version VARCHAR(10) NOT NULL CHECK (version IN ('PB3', 'NEW', 'OLD')),
+    publication_year INTEGER NOT NULL,
     pdf_url TEXT,
     cover_image_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -36,7 +36,7 @@ CREATE TABLE courses (
     description TEXT,
     lessons INTEGER DEFAULT 0,
     duration VARCHAR(50),
-    difficulty VARCHAR(20) NOT NULL CHECK (difficulty IN ('Cơ bản', 'Trung bình', 'Nâng cao', 'Chuyên gia')),
+    difficulty VARCHAR(20) NOT NULL CHECK (difficulty IN ('BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT')),
     cover_image_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -48,8 +48,8 @@ CREATE TABLE vocabulary (
     hanzi VARCHAR(255) NOT NULL,
     pinyin VARCHAR(255) NOT NULL,
     nghia TEXT NOT NULL,
-    vi_du TEXT,
-    bien_the VARCHAR(10) NOT NULL CHECK (bien_the IN ('GIAN', 'PHON', 'BOTH')),
+    example TEXT,
+    variant VARCHAR(20) NOT NULL CHECK (variant IN ('SIMPLIFIED', 'TRADITIONAL', 'BOTH')),
     hsk_level INTEGER CHECK (hsk_level BETWEEN 1 AND 6),
     frequency_rank INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -69,7 +69,7 @@ CREATE TABLE grammar_topics (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     content TEXT,
-    level VARCHAR(20) NOT NULL CHECK (level IN ('Cơ bản', 'Trung bình', 'Nâng cao')),
+    level VARCHAR(20) NOT NULL CHECK (level IN ('BASIC', 'MEDIUM', 'ADVANCED')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -124,7 +124,7 @@ CREATE TABLE user_ai_usage (
 CREATE INDEX idx_users_keycloak_id ON users(keycloak_id);
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_vocabulary_hanzi ON vocabulary(hanzi);
-CREATE INDEX idx_vocabulary_bien_the ON vocabulary(bien_the);
+CREATE INDEX idx_vocabulary_variant ON vocabulary(variant);
 CREATE INDEX idx_vocabulary_hsk_level ON vocabulary(hsk_level);
 CREATE INDEX idx_vocab_tags_vocab_id ON vocab_tags(vocab_id);
 CREATE INDEX idx_user_learning_progress_user_id ON user_learning_progress(user_id);

@@ -21,7 +21,7 @@ public interface VocabularySearchRepository extends ElasticsearchRepository<Voca
     /**
      * Full-text search across all fields
      */
-    @Query("{\"multi_match\": {\"query\": \"?0\", \"fields\": [\"hanzi^3\", \"pinyin^2\", \"nghia^2\", \"viDu\"], \"fuzziness\": \"AUTO\"}}")
+    @Query("{\"multi_match\": {\"query\": \"?0\", \"fields\": [\"hanzi^3\", \"pinyin^2\", \"meaning^2\", \"example\"], \"fuzziness\": \"AUTO\"}}")
     Page<VocabularyDocument> searchByAllFields(String query, Pageable pageable);
 
     /**
@@ -37,7 +37,7 @@ public interface VocabularySearchRepository extends ElasticsearchRepository<Voca
     /**
      * Search by Vietnamese meaning
      */
-    Page<VocabularyDocument> findByNghiaContainingIgnoreCase(String nghia, Pageable pageable);
+    Page<VocabularyDocument> findByMeaningContainingIgnoreCase(String meaning, Pageable pageable);
 
     /**
      * Filter by variant type
@@ -52,7 +52,7 @@ public interface VocabularySearchRepository extends ElasticsearchRepository<Voca
     /**
      * Advanced multi-criteria search
      */
-    @Query("{\"bool\": {\"must\": [{\"multi_match\": {\"query\": \"?0\", \"fields\": [\"hanzi^3\", \"pinyin^2\", \"nghia^2\"], \"fuzziness\": \"AUTO\"}}], \"filter\": [{\"term\": {\"variant\": \"?1\"}}]}}")
+    @Query("{\"bool\": {\"must\": [{\"multi_match\": {\"query\": \"?0\", \"fields\": [\"hanzi^3\", \"pinyin^2\", \"meaning^2\", \"example\"], \"fuzziness\": \"AUTO\"}}], \"filter\": [{\"term\": {\"variant\": \"?1\"}}]}}")
     Page<VocabularyDocument> advancedSearch(String query, String variant, Pageable pageable);
     
     /**

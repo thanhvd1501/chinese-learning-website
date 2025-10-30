@@ -1,6 +1,6 @@
 package com.chineselearning.dto.request;
 
-import com.chineselearning.domain.Textbook.PhienBanType;
+import com.chineselearning.domain.Textbook.VersionType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,17 +20,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TextbookRequest {
 
-    @NotBlank(message = "Tên giáo trình không được trống")
+    @NotBlank(message = "Textbook name is required")
     private String name;
 
     private String description;
 
-    @NotNull(message = "Phiên bản không được null")
-    private PhienBanType phienBan;
+    @NotNull(message = "Version is required")
+    private VersionType version;  // Vietnamese: phienBan
 
-    @NotNull(message = "Năm xuất bản không được null")
-    @Min(value = 2000, message = "Năm xuất bản phải từ 2000 trở lên")
-    private Integer namXuatBan;
+    @NotNull(message = "Publication year is required")
+    @Min(value = 2000, message = "Publication year must be from 2000 onwards")
+    private Integer publicationYear;  // Vietnamese: namXuatBan
 
     private String pdfUrl;
 

@@ -169,7 +169,7 @@ public class VocabularySearchService implements SearchService<VocabularyDocument
 
         Pageable pageable = PageRequest.of(page, size);
         Page<VocabularyDocument> results = vocabularySearchRepository
-                .findByNghiaContainingIgnoreCase(meaning, pageable);
+                .findByMeaningContainingIgnoreCase(meaning, pageable);
 
         long searchTime = System.currentTimeMillis() - startTime;
 

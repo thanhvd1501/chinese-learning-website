@@ -18,9 +18,7 @@ spring:
   # JPA Configuration
   jpa:
     hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.SnakeCaseStrategy
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
@@ -33,8 +31,8 @@ spring:
 
   # Flyway Configuration
   flyway:
-    enabled: true
-    baseline-on-migrate: true
+    enabled: false
+    baseline-on-migrate: false
     locations: classpath:db/migration
     schemas: public
 
@@ -114,8 +112,8 @@ server:
 logging:
   level:
     root: INFO
-    com.chineselearning: DEBUG
-    org.springframework.security: DEBUG
+    com.chineselearning: INFO
+    org.springframework.security: INFO
 
 # Application Configuration
 app:
@@ -124,6 +122,27 @@ app:
       cron: "0 */30 * * * *"  # Sync every 30 minutes
       enabled: true
     name: logs/application.log
+
+  # Application Custom Properties
+  cors:
+    allowed-origins:
+      - http://localhost:5173
+      - http://localhost:3000
+      - http://localhost:5174
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+    allowed-headers:
+      - "*"
+    max-age: 3600
+
+  jwt:
+    issuer-uri: http://localhost:8180/realms/chinese-learning
+    audience: chinese-learning-backend
 
 # Management & Actuator
 management:
@@ -145,26 +164,4 @@ springdoc:
     enabled: true
     operations-sorter: method
     tags-sorter: alpha
-
-# Application Custom Properties
-app:
-  cors:
-    allowed-origins:
-      - http://localhost:5173
-      - http://localhost:3000
-      - http://localhost:5174
-    allowed-methods:
-      - GET
-      - POST
-      - PUT
-      - DELETE
-      - PATCH
-      - OPTIONS
-    allowed-headers:
-      - "*"
-    max-age: 3600
-  
-  jwt:
-    issuer-uri: http://localhost:8180/realms/chinese-learning
-    audience: chinese-learning-backend
 

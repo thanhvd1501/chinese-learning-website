@@ -28,8 +28,8 @@ public class Vocabulary {
     @Column(nullable = false)
     private String pinyin;
 
-    @Column(nullable = false)
-    private String nghia;
+    @Column(name = "nghia", nullable = false)
+    private String meaning;
 
     @Column(name = "example")
     private String example;

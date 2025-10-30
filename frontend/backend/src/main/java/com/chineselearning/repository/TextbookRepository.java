@@ -7,11 +7,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository for Textbook entity
+ * 
+ * @author Senior Backend Architect
+ */
 @Repository
 public interface TextbookRepository extends JpaRepository<Textbook, Long> {
 
-    List<Textbook> findByPhienBan(VersionType phienBan);
+    List<Textbook> findByVersion(VersionType version);
 
-    List<Textbook> findByNamXuatBan(Integer namXuatBan);
+    List<Textbook> findByPublicationYear(Integer publicationYear);
 }
 

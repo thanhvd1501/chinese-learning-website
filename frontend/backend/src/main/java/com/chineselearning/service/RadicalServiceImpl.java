@@ -45,9 +45,9 @@ public class RadicalServiceImpl implements RadicalService {
         log.info("Creating new radical: {}", request.getRadical());
 
         // Check for duplicate radical
-        radicalRepository.findByRadical(request.getRadical())
+        radicalRepository.findByHanzi(request.getRadical())
                 .ifPresent(r -> {
-                    throw new DuplicateResourceException("Radical", "radical", request.getRadical());
+                    throw new DuplicateResourceException("Radical", "hanzi", request.getRadical());
                 });
 
         Radical radical = radicalMapper.toEntity(request);
@@ -73,7 +73,7 @@ public class RadicalServiceImpl implements RadicalService {
     public List<RadicalResponse> getAll() {
         log.debug("Fetching all radicals");
 
-        return radicalRepository.findAll(Sort.by(Sort.Direction.ASC, "strokeCount")).stream()
+        return radicalRepository.findAll(Sort.by(Sort.Direction.ASC, "strokes")).stream()
                 .map(radicalMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -83,7 +83,7 @@ public class RadicalServiceImpl implements RadicalService {
     public PageResponse<RadicalResponse> getPage(int page, int size) {
         log.debug("Fetching radicals page: {}, size: {}", page, size);
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "strokeCount"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "strokes"));
         Page<Radical> radicalPage = radicalRepository.findAll(pageable);
 
         List<RadicalResponse> content = radicalPage.getContent().stream()
@@ -140,7 +140,7 @@ public class RadicalServiceImpl implements RadicalService {
     public List<RadicalResponse> findByStrokeCount(Integer strokeCount) {
         log.debug("Finding radicals by stroke count: {}", strokeCount);
 
-        return radicalRepository.findByStrokeCount(strokeCount).stream()
+        return radicalRepository.findByStrokes(strokeCount).stream()
                 .map(radicalMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -150,8 +150,8 @@ public class RadicalServiceImpl implements RadicalService {
     public RadicalResponse findByRadical(String radical) {
         log.debug("Finding radical by character: {}", radical);
 
-        Radical found = radicalRepository.findByRadical(radical)
-                .orElseThrow(() -> new ResourceNotFoundException("Radical", "radical", radical));
+        Radical found = radicalRepository.findByHanzi(radical)
+                .orElseThrow(() -> new ResourceNotFoundException("Radical", "hanzi", radical));
 
         return radicalMapper.toResponse(found);
     }

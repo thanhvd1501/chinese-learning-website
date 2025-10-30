@@ -25,6 +25,6 @@ public class RadicalResponse {
     private String examples;
     private String pinyin;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    // Note: Radical entity doesn't have updatedAt field
 }
 

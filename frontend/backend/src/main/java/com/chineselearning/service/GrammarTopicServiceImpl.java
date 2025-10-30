@@ -141,20 +141,25 @@ public class GrammarTopicServiceImpl implements GrammarTopicService {
     public List<GrammarTopicResponse> search(String keyword) {
         log.debug("Searching grammar topics by keyword: {}", keyword);
 
+        String lowerKeyword = keyword.toLowerCase();
         return grammarTopicRepository.findAll().stream()
-                .filter(g -> g.getTitle().toLowerCase().contains(keyword.toLowerCase())
-                        || g.getStructure().toLowerCase().contains(keyword.toLowerCase()))
+                .filter(g -> {
+                    boolean matchTitle = g.getTitle() != null && g.getTitle().toLowerCase().contains(lowerKeyword);
+                    boolean matchDescription = g.getDescription() != null && g.getDescription().toLowerCase().contains(lowerKeyword);
+                    boolean matchContent = g.getContent() != null && g.getContent().toLowerCase().contains(lowerKeyword);
+                    return matchTitle || matchDescription || matchContent;
+                })
                 .map(grammarTopicMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    @Cacheable(value = "grammarTopics", key = "'tag-' + #tag")
-    public List<GrammarTopicResponse> findByTag(String tag) {
-        log.debug("Finding grammar topics by tag: {}", tag);
+    @Cacheable(value = "grammarTopics", key = "'level-' + #level")
+    public List<GrammarTopicResponse> findByLevel(GrammarTopic.Level level) {
+        log.debug("Finding grammar topics by level: {}", level);
 
         return grammarTopicRepository.findAll().stream()
-                .filter(g -> g.getTags() != null && g.getTags().contains(tag))
+                .filter(g -> g.getLevel() == level)
                 .map(grammarTopicMapper::toResponse)
                 .collect(Collectors.toList());
     }

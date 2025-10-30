@@ -6,10 +6,9 @@
     "max_result_window": 10000,
     "analysis": {
       "analyzer": {
-        "pinyin_analyzer": {
-          "type": "custom",
-          "tokenizer": "standard",
-          "filter": ["lowercase"]
+        "chinese_analyzer": {
+          "type": "standard",
+          "stopwords": "_none_"
         },
         "vietnamese_analyzer": {
           "type": "custom",
@@ -26,6 +25,7 @@
       },
       "hanzi": {
         "type": "text",
+        "analyzer": "standard",
         "fields": {
           "keyword": {
             "type": "keyword"
@@ -34,25 +34,32 @@
       },
       "pinyin": {
         "type": "text",
-        "analyzer": "pinyin_analyzer",
+        "analyzer": "standard",
         "fields": {
           "keyword": {
             "type": "keyword"
           }
         }
       },
-      "nghia": {
+      "meaning": {
         "type": "text",
         "analyzer": "vietnamese_analyzer"
       },
-      "viDu": {
-        "type": "text"
+      "example": {
+        "type": "text",
+        "analyzer": "standard"
       },
-      "bienThe": {
+      "variant": {
         "type": "keyword"
       },
       "tags": {
         "type": "keyword"
+      },
+      "hskLevel": {
+        "type": "integer"
+      },
+      "frequencyRank": {
+        "type": "integer"
       },
       "searchText": {
         "type": "text",

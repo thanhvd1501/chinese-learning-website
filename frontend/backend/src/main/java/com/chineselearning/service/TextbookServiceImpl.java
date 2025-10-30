@@ -1,7 +1,7 @@
 package com.chineselearning.service;
 
 import com.chineselearning.domain.Textbook;
-import com.chineselearning.domain.Textbook.PhienBanType;
+import com.chineselearning.domain.Textbook.VersionType;
 import com.chineselearning.dto.PageResponse;
 import com.chineselearning.dto.request.TextbookRequest;
 import com.chineselearning.dto.response.TextbookResponse;
@@ -46,15 +46,15 @@ public class TextbookServiceImpl implements TextbookService {
         log.info("Creating new textbook: {}", request.getName());
 
         // Validate no duplicate name in same year
-        boolean exists = textbookRepository.findByPhienBan(request.getPhienBan()).stream()
+        boolean exists = textbookRepository.findByVersion(request.getVersion()).stream()
                 .anyMatch(t -> t.getName().equalsIgnoreCase(request.getName()) 
-                        && t.getNamXuatBan().equals(request.getNamXuatBan()));
+                        && t.getPublicationYear().equals(request.getPublicationYear()));
 
         if (exists) {
             throw new DuplicateResourceException(
                     "Textbook", 
                     "name and year", 
-                    request.getName() + " (" + request.getNamXuatBan() + ")"
+                    request.getName() + " (" + request.getPublicationYear() + ")"
             );
         }
 
@@ -81,7 +81,7 @@ public class TextbookServiceImpl implements TextbookService {
     public List<TextbookResponse> getAll() {
         log.debug("Fetching all textbooks");
         
-        return textbookRepository.findAll(Sort.by(Sort.Direction.DESC, "namXuatBan")).stream()
+        return textbookRepository.findAll(Sort.by(Sort.Direction.DESC, "publicationYear")).stream()
                 .map(textbookMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -91,7 +91,7 @@ public class TextbookServiceImpl implements TextbookService {
     public PageResponse<TextbookResponse> getPage(int page, int size) {
         log.debug("Fetching textbooks page: {}, size: {}", page, size);
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "namXuatBan"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "publicationYear"));
         Page<Textbook> textbookPage = textbookRepository.findAll(pageable);
 
         List<TextbookResponse> content = textbookPage.getContent().stream()
@@ -145,21 +145,21 @@ public class TextbookServiceImpl implements TextbookService {
     }
 
     @Override
-    @Cacheable(value = "textbooks", key = "'phienban-' + #phienBan")
-    public List<TextbookResponse> findByPhienBan(PhienBanType phienBan) {
-        log.debug("Finding textbooks by phien ban: {}", phienBan);
+    @Cacheable(value = "textbooks", key = "'version-' + #version")
+    public List<TextbookResponse> findByVersion(VersionType version) {
+        log.debug("Finding textbooks by version: {}", version);
 
-        return textbookRepository.findByPhienBan(phienBan).stream()
+        return textbookRepository.findByVersion(version).stream()
                 .map(textbookMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Cacheable(value = "textbooks", key = "'year-' + #year")
-    public List<TextbookResponse> findByNamXuatBan(Integer year) {
+    public List<TextbookResponse> findByPublicationYear(Integer year) {
         log.debug("Finding textbooks by year: {}", year);
 
-        return textbookRepository.findByNamXuatBan(year).stream()
+        return textbookRepository.findByPublicationYear(year).stream()
                 .map(textbookMapper::toResponse)
                 .collect(Collectors.toList());
     }

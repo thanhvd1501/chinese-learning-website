@@ -1,5 +1,6 @@
 package com.chineselearning.controller;
 
+import com.chineselearning.domain.GrammarTopic;
 import com.chineselearning.dto.PageResponse;
 import com.chineselearning.dto.request.GrammarTopicRequest;
 import com.chineselearning.dto.response.GrammarTopicResponse;
@@ -32,21 +33,27 @@ public class GrammarTopicController {
     private final GrammarTopicService grammarTopicService;
 
     @Operation(
-            summary = "Lấy danh sách ngữ pháp",
-            description = "Lấy tất cả chủ đề ngữ pháp (Public)"
+            summary = "Get all grammar topics",
+            description = "Get all grammar topics with optional filtering (Public)"
     )
     @GetMapping
     public ResponseEntity<List<GrammarTopicResponse>> getAllGrammarTopics(
-            @Parameter(description = "Tìm kiếm theo từ khóa") 
+            @Parameter(description = "Search by keyword") 
             @RequestParam(required = false) String keyword,
-            @Parameter(description = "Lọc theo tag") 
-            @RequestParam(required = false) String tag
+            @Parameter(description = "Filter by level: BASIC, MEDIUM, ADVANCED") 
+            @RequestParam(required = false) String level
     ) {
         if (keyword != null) {
             return ResponseEntity.ok(grammarTopicService.search(keyword));
         }
-        if (tag != null) {
-            return ResponseEntity.ok(grammarTopicService.findByTag(tag));
+        if (level != null) {
+            try {
+                GrammarTopic.Level grammarLevel = GrammarTopic.Level.valueOf(level.toUpperCase());
+                return ResponseEntity.ok(grammarTopicService.findByLevel(grammarLevel));
+            } catch (IllegalArgumentException e) {
+                // Invalid level, return all
+                return ResponseEntity.ok(grammarTopicService.getAll());
+            }
         }
         return ResponseEntity.ok(grammarTopicService.getAll());
     }

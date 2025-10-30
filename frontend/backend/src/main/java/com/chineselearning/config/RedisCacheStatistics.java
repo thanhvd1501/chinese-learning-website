@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -65,7 +66,7 @@ public class RedisCacheStatistics implements HealthIndicator {
         try {
             // Get Redis info
             var connection = redisTemplate.getConnectionFactory().getConnection();
-            var info = connection.info();
+            Properties info = connection.info();
             
             stats.put("connected", true);
             stats.put("uptime_in_seconds", extractValue(info, "uptime_in_seconds"));
@@ -136,13 +137,15 @@ public class RedisCacheStatistics implements HealthIndicator {
         // Implementation depends on business requirements
     }
 
-    private String extractValue(String info, String key) {
-        for (String line : info.split("\n")) {
-            if (line.startsWith(key + ":")) {
-                return line.substring(key.length() + 1).trim();
-            }
+    /**
+     * Extract value from Redis info Properties
+     */
+    private String extractValue(Properties info, String key) {
+        if (info == null) {
+            return "N/A";
         }
-        return "N/A";
+        Object value = info.get(key);
+        return value != null ? value.toString() : "N/A";
     }
 
     private String extractCacheType(String key) {

@@ -31,10 +31,10 @@ public class GrammarTopicDocument {
     @Field(type = FieldType.Text, analyzer = "standard")
     private String title;
 
-    @Field(type = FieldType.Text, analyzer = "vietnamese_analyzer")
+    @Field(type = FieldType.Text, analyzer = "standard")
     private String description;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "standard")
     private String content;
 
     @Field(type = FieldType.Keyword)

@@ -1,6 +1,6 @@
 package com.chineselearning.service.interfaces;
 
-import com.chineselearning.domain.Textbook.PhienBanType;
+import com.chineselearning.domain.Textbook.VersionType;
 import com.chineselearning.dto.request.TextbookRequest;
 import com.chineselearning.dto.response.TextbookResponse;
 
@@ -15,14 +15,14 @@ import java.util.List;
 public interface TextbookService extends CrudService<TextbookRequest, TextbookResponse, Long> {
 
     /**
-     * Find textbooks by phien ban type
+     * Find textbooks by version type
      */
-    List<TextbookResponse> findByPhienBan(PhienBanType phienBan);
+    List<TextbookResponse> findByVersion(VersionType version);
 
     /**
      * Find textbooks by publication year
      */
-    List<TextbookResponse> findByNamXuatBan(Integer year);
+    List<TextbookResponse> findByPublicationYear(Integer year);
 
     /**
      * Search textbooks by name

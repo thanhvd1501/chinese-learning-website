@@ -1,6 +1,5 @@
 package com.chineselearning.search.document;
 
-import com.chineselearning.domain.Vocabulary.VariantType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,23 +23,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(indexName = "vocabularies")
-@Setting(settingPath = "elasticsearch/vocabulary-settings.json")
 public class VocabularyDocument {
 
     @Id
     private Long id;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = "standard")
     private String hanzi;
 
-    @Field(type = FieldType.Text, analyzer = "pinyin_analyzer")
+    @Field(type = FieldType.Text, analyzer = "standard")
     private String pinyin;
 
-    @Field(type = FieldType.Text, analyzer = "vietnamese_analyzer")
-    private String nghia;
+    @Field(type = FieldType.Text, analyzer = "standard")
+    private String meaning;  // Vietnamese: nghia
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
-    private String viDu;
+    @Field(type = FieldType.Text, analyzer = "standard")
+    private String example;  // Vietnamese: viDu
 
     @Field(type = FieldType.Keyword)
     private String variant;
@@ -72,8 +69,8 @@ public class VocabularyDocument {
         StringBuilder sb = new StringBuilder();
         if (hanzi != null) sb.append(hanzi).append(" ");
         if (pinyin != null) sb.append(pinyin).append(" ");
-        if (nghia != null) sb.append(nghia).append(" ");
-        if (viDu != null) sb.append(viDu);
+        if (meaning != null) sb.append(meaning).append(" ");
+        if (example != null) sb.append(example);
         this.searchText = sb.toString().trim();
     }
 }

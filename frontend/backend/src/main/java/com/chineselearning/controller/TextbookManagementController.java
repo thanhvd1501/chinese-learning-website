@@ -1,6 +1,6 @@
 package com.chineselearning.controller;
 
-import com.chineselearning.domain.Textbook.PhienBanType;
+import com.chineselearning.domain.Textbook.VersionType;
 import com.chineselearning.dto.PageResponse;
 import com.chineselearning.dto.request.TextbookRequest;
 import com.chineselearning.dto.response.TextbookResponse;
@@ -33,21 +33,21 @@ public class TextbookManagementController {
     private final TextbookService textbookService;
 
     @Operation(
-            summary = "Lấy danh sách giáo trình",
-            description = "Lấy tất cả giáo trình (Public)"
+            summary = "Get all textbooks",
+            description = "Get all textbooks (Public)"
     )
     @GetMapping
     public ResponseEntity<List<TextbookResponse>> getAllTextbooks(
-            @Parameter(description = "Filter theo phiên bản") 
-            @RequestParam(required = false) PhienBanType phienBan,
-            @Parameter(description = "Filter theo năm xuất bản") 
+            @Parameter(description = "Filter by version type") 
+            @RequestParam(required = false) VersionType version,
+            @Parameter(description = "Filter by publication year") 
             @RequestParam(required = false) Integer year
     ) {
-        if (phienBan != null) {
-            return ResponseEntity.ok(textbookService.findByPhienBan(phienBan));
+        if (version != null) {
+            return ResponseEntity.ok(textbookService.findByVersion(version));
         }
         if (year != null) {
-            return ResponseEntity.ok(textbookService.findByNamXuatBan(year));
+            return ResponseEntity.ok(textbookService.findByPublicationYear(year));
         }
         return ResponseEntity.ok(textbookService.getAll());
     }

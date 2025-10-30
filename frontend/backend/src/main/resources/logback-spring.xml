@@ -45,7 +45,7 @@
     </appender>
 
     <!-- Logger Levels -->
-    <logger name="com.chineselearning" level="DEBUG"/>
+    <logger name="com.chineselearning" level="INFO"/>
     <logger name="org.springframework.web" level="INFO"/>
     <logger name="org.springframework.security" level="INFO"/>
     <logger name="org.hibernate.SQL" level="DEBUG"/>

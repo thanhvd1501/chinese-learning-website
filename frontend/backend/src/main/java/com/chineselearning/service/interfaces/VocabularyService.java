@@ -1,6 +1,5 @@
 package com.chineselearning.service.interfaces;
 
-import com.chineselearning.domain.Vocabulary.VariantType;
 import com.chineselearning.dto.PageResponse;
 import com.chineselearning.dto.response.VocabularyResponse;
 
@@ -17,7 +16,7 @@ public interface VocabularyService {
     /**
      * Get paginated vocabulary list
      */
-    PageResponse<VocabularyResponse> getVocabulary(int page, int size, String search, VariantType bienThe);
+    PageResponse<VocabularyResponse> getVocabulary(int page, int size, String search, String variant);
 
     /**
      * Get vocabulary by ID

@@ -1,7 +1,6 @@
 package com.chineselearning.service;
 
 import com.chineselearning.domain.Vocabulary;
-import com.chineselearning.domain.Vocabulary.VariantType;
 import com.chineselearning.dto.PageResponse;
 import com.chineselearning.dto.response.VocabularyResponse;
 import com.chineselearning.exception.custom.ResourceNotFoundException;
@@ -39,9 +38,9 @@ public class VocabularyServiceImpl implements VocabularyService {
     private final VocabularyMapper vocabularyMapper;
 
     @Override
-    @Cacheable(value = "vocabularies", key = "'page-' + #page + '-' + #size + '-' + #search + '-' + #bienThe")
-    public PageResponse<VocabularyResponse> getVocabulary(int page, int size, String search, VariantType bienThe) {
-        log.debug("Fetching vocabulary: page={}, size={}, search={}, bienThe={}", page, size, search, bienThe);
+    @Cacheable(value = "vocabularies", key = "'page-' + #page + '-' + #size + '-' + #search + '-' + #variant")
+    public PageResponse<VocabularyResponse> getVocabulary(int page, int size, String search, String variant) {
+        log.debug("Fetching vocabulary: page={}, size={}, search={}, variant={}", page, size, search, variant);
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"));
 
@@ -53,18 +52,23 @@ public class VocabularyServiceImpl implements VocabularyService {
                     cb.or(
                             cb.like(cb.lower(root.get("hanzi")), "%" + search.toLowerCase() + "%"),
                             cb.like(cb.lower(root.get("pinyin")), "%" + search.toLowerCase() + "%"),
-                            cb.like(cb.lower(root.get("nghia")), "%" + search.toLowerCase() + "%")
+                            cb.like(cb.lower(root.get("meaning")), "%" + search.toLowerCase() + "%")
                     )
             );
         }
 
-        if (bienThe != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.or(
-                            cb.equal(root.get("bienThe"), bienThe),
-                            cb.equal(root.get("bienThe"), VariantType.BOTH)
-                    )
-            );
+        if (variant != null && !variant.isEmpty()) {
+            try {
+                Vocabulary.VariantType variantType = Vocabulary.VariantType.valueOf(variant.toUpperCase());
+                spec = spec.and((root, query, cb) ->
+                        cb.or(
+                                cb.equal(root.get("variant"), variantType),
+                                cb.equal(root.get("variant"), Vocabulary.VariantType.BOTH)
+                        )
+                );
+            } catch (IllegalArgumentException e) {
+                log.warn("Invalid variant type: {}", variant);
+            }
         }
 
         Page<Vocabulary> vocabPage = vocabularyRepository.findAll(spec, pageable);
@@ -106,7 +110,7 @@ public class VocabularyServiceImpl implements VocabularyService {
         return vocabularyRepository.findAll().stream()
                 .filter(v -> v.getHanzi().contains(keyword)
                         || v.getPinyin().toLowerCase().contains(keyword.toLowerCase())
-                        || v.getNghia().toLowerCase().contains(keyword.toLowerCase()))
+                        || v.getMeaning().toLowerCase().contains(keyword.toLowerCase()))
                 .map(vocabularyMapper::toResponse)
                 .collect(Collectors.toList());
     }
